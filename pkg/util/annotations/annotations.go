@@ -11,15 +11,23 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-lv1"
+limitations under the License.
+*/
+
+package annotations
+
+import (
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 // GetAnnotationValue retrieves the value of a specific annotation key from
-// a Kubernetes object's metadataGetAnnotations(), "example.io/my-annotation")
-//	if ok {
-//		fmt.Println("Annotation value:", val)
-//	}
-func GetAnnotationValue(annotations map[string]string, key string) (string, bool) {
+// a Kubernetes object's metadata map.
+//
+// Example:
+//
+//	valobjAnnotations(), "example.io/my-annotation")
+//\tfmt.Println("Annotation value:", val)
+ map[string]string, key string) (string, bool) {
 	if annotations == nil {
 		return "", false
 	}
@@ -71,6 +79,7 @@ func MergeAnnotations(dst, src map[string]string) map[string]string {
 
 // ContainsAnnotations checks whether all provided key-value pairs exist in
 // the annotations map with matching values.
+// Note: if subset is empty, this always returns true (vacuously true).
 func ContainsAnnotations(annotations map[string]string, subset map[string]string) bool {
 	for k, v := range subset {
 		if annotations[k] != v {
