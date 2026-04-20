@@ -17,20 +17,11 @@ limitations under the License.
 package annotations
 
 import (
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-)
-
-// GetAnnotationValue retrieves the value of a specific annotation key from
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1 of a specific annotation key from
 // a Kubernetes object's annotations map. Returns the value and a boolean
-// indicating whether the key was found.
-//
-// Example:
-//
-//	val, ok := GetAnnotationValue(obj.GetAnnotations(), "example.io/my-annotation")
-//	if ok {
-//		fmt.Println("Annotation value:", val)
-//	}
-func GetAnnotationValue(annotations map[string]string, key string) (string, bool) {
+// indicating whether the key was foundtval, ok := GetAnnotationValue(obj.GetAnnotations(), "example.io/my-annotation")
+//	if okmt.Println("Annotationt}
+func GetAnnotationValue(annotations) (string, bool) {
 	if annotations == nil {
 		return "", false
 	}
@@ -69,6 +60,8 @@ func HasAnnotation(annotations map[string]string, key string) bool {
 // MergeAnnotations merges src annotations into dst. If a key exists in both
 // maps, the value from src takes precedence. Returns a new map without
 // modifying the originals.
+//
+// Note: passing nil for either dst or src is safe; nil is treated as empty.
 func MergeAnnotations(dst, src map[string]string) map[string]string {
 	result := make(map[string]string, len(dst)+len(src))
 	for k, v := range dst {
@@ -83,7 +76,11 @@ func MergeAnnotations(dst, src map[string]string) map[string]string {
 // ContainsAnnotations checks whether all provided key-value pairs exist in
 // the annotations map with matching values.
 // Note: if subset is empty, this always returns true (vacuously true).
+// Note: if annotations is nil and subset is non-empty, this returns false.
 func ContainsAnnotations(annotations map[string]string, subset map[string]string) bool {
+	if annotations == nil && len(subset) > 0 {
+		return false
+	}
 	for k, v := range subset {
 		if annotations[k] != v {
 			return false
