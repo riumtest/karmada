@@ -21,13 +21,16 @@ import (
 )
 
 // GetAnnotationValue retrieves the value of a specific annotation key from
-// a Kubernetes object's metadata map.
+// a Kubernetes object's annotations map. Returns the value and a boolean
+// indicating whether the key was found.
 //
 // Example:
 //
-//	valobjAnnotations(), "example.io/my-annotation")
-//\tfmt.Println("Annotation value:", val)
- map[string]string, key string) (string, bool) {
+//	val, ok := GetAnnotationValue(obj.GetAnnotations(), "example.io/my-annotation")
+//	if ok {
+//		fmt.Println("Annotation value:", val)
+//	}
+func GetAnnotationValue(annotations map[string]string, key string) (string, bool) {
 	if annotations == nil {
 		return "", false
 	}
